@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import requests
+import time
 
 st.title("❤️ Heart Disease Prediction App (FastAPI Backend)")
 st.write("Enter patient details and get prediction from FastAPI backend.")
@@ -42,22 +43,36 @@ payload = {
 }
 
 # -----------------------------
-# Call FastAPI
+# Backend URL
 # -----------------------------
-
-# get backend url from environment or secrets
 BACKEND_URL = "https://heart-api-wb2j.onrender.com/predict"
 
-if st.button("Predict"):
-    with st.spinner("Sending data to FastAPI backend..."):
+# -----------------------------
+# Function: Call backend with retry + long timeout
+# -----------------------------
+def call_backend_with_retry(data, retries=3, timeout=40):
+    for attempt in range(retries):
         try:
-            response = requests.post(BACKEND_URL, json=payload, timeout=10)
+            return requests.post(BACKEND_URL, json=data, timeout=timeout)
+        except Exception as e:
+            if attempt < retries - 1:
+                time.sleep(3)  # wait before retry
+            else:
+                raise e
+
+# -----------------------------
+# Predict Button
+# -----------------------------
+if st.button("Predict"):
+    with st.spinner("Backend waking up... please wait (Render Free Tier)..."):
+        try:
+            response = call_backend_with_retry(payload, retries=3, timeout=40)
 
             if response.status_code == 200:
                 result = response.json()
 
                 prediction = result["prediction"]
-                probability = result["probability"]
+                probability = result.get("probability", 0)
 
                 st.subheader("🔍 Prediction Result:")
 
@@ -67,8 +82,9 @@ if st.button("Predict"):
                     st.success(f"✅ No Heart Disease Detected\nProbability: {probability:.2f}")
 
             else:
-                st.warning("⚠️ FastAPI returned an error. Check backend.")
+                st.warning("⚠️ FastAPI returned an error. Check backend logs.")
 
         except Exception as e:
             st.error(f"❌ Error connecting to FastAPI: {e}")
+
 
