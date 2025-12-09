@@ -46,7 +46,7 @@ payload = {
 # -----------------------------
 
 # get backend url from environment or secrets
-BACKEND_URL = st.secrets.get("BACKEND_URL", None) or os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+BACKEND_URL = st.secrets.get("BACKEND_URL", None) or os.getenv("BACKEND_URL", "https://heart-api-wb2j.onrender.com")
 PRED_URL = BACKEND_URL.rstrip("/") + "/predict"
 
 if st.button("Predict"):
