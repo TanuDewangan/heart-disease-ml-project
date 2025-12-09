@@ -46,13 +46,12 @@ payload = {
 # -----------------------------
 
 # get backend url from environment or secrets
-BACKEND_URL = st.secrets.get("BACKEND_URL", None) or os.getenv("BACKEND_URL", "https://heart-api-wb2j.onrender.com")
-PRED_URL = BACKEND_URL.rstrip("/") + "/predict"
+BACKEND_URL = "https://heart-api-wb2j.onrender.com/predict"
 
 if st.button("Predict"):
     with st.spinner("Sending data to FastAPI backend..."):
         try:
-            response = requests.post(PRED_URL, json=payload, timeout=10)
+            response = requests.post(BACKEND_URL, json=payload, timeout=10)
 
             if response.status_code == 200:
                 result = response.json()
