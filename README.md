@@ -140,7 +140,7 @@ This project demonstrates how a **real-world ML problem** can be taken from raw 
 ![Precision–Recall Curve](assets/Precision_recall_curve.png) 
 
 ### 🔹 Classification Report
-![Classification Report](assets/Classification_report.png.png)
+![Classification Report](assets/Classification_report.png)
 
 ### Key Observations
 - Low false-negative rate (critical for medical use cases)
@@ -170,15 +170,15 @@ Input (JSON):
 
 {
   "Age": 45,
-  "Sex": "Male",
-  "ChestPainType": "ATA",
   "RestingBP": 120,
   "Cholesterol": 230,
   "FastingBS": 0,
-  "RestingingECG": "Normal",
   "MaxHR": 150,
-  "ExerciseAngina": "No",
   "Oldpeak": 1.2,
+  "Sex": "Male",
+  "ChestPainType": "ATA",
+  "RestingECG": "Normal",
+  "ExerciseAngina": "No",
   "ST_Slope": "Flat"
 }
 
@@ -186,8 +186,8 @@ Input (JSON):
 Output:
 
 {
-  "prediction": 1,
-  "probability": 0.87
+  "prediction": 0,
+  "probability": 0.44
 }
 
 ### Backend Stack
